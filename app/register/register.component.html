@@ -1,0 +1,38 @@
+<div class="container">
+  <div class="row">
+    <div class="card col-sm-12" style="max-width: 700px;margin:30px auto;">
+      <form class="card-body">
+        <h3 class="text-center text-success">Sing Up Form</h3>
+        <div class="form-group row">
+            <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+            <div class="col-sm-10">
+              <input type="text" [(ngModel)]="userData.name" name="name" class="form-control" id="inputName">
+            </div>
+        </div>
+        <div class="form-group row">
+          <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+          <div class="col-sm-10">
+            <input type="email" [(ngModel)]="userData.email" name="email" class="form-control" id="inputEmail">
+          </div>
+        </div>
+        <div class="form-group row">
+            <label for="inputusername" class="col-sm-2 col-form-label">User Name</label>
+            <div class="col-sm-10">
+              <input type="text" [(ngModel)]="userData.username" name="username" class="form-control" id="inputusername">
+            </div>
+          </div>
+        <div class="form-group row">
+          <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+          <div class="col-sm-10">
+            <input type="password" [(ngModel)]="userData.password" name="password" class="form-control" id="inputPassword">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-10">
+            <input (click)="addNewUser()" type="button" value="Sign UP" class="btn btn-primary">
+          </div>
+        </div>
+      </form>
+  </div>
+</div>
+</div>
