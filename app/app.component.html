@@ -16,11 +16,14 @@
     </ul>
     <div class="form-inline my-2 my-lg-0">
       <ul class="navbar-nav mr-auto">
-          <li class="nav-item" routerLinkActive="active">
-              <a class="nav-link" routerLink="/login">Login</a>
-          </li>
-          <li class="nav-item" routerLinkActive="active">
-            <a class="nav-link" routerLink="/register">Register</a>
+            <li *ngIf="!userService.isLoggedIn()" class="nav-item" routerLinkActive="active">
+                <a class="nav-link" routerLink="/login">Login</a>
+            </li>
+            <li *ngIf="!userService.isLoggedIn()" class="nav-item" routerLinkActive="active">
+              <a class="nav-link" routerLink="/register">Register</a>
+            </li> 
+          <li *ngIf="userService.isLoggedIn()" class="nav-item" routerLinkActive="active">
+            <a class="nav-link" style="cursor: pointer" (click)="userService.LogoutUser()">Logout</a>
           </li>
       </ul>
     </div>

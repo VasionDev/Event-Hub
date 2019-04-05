@@ -1,7 +1,29 @@
 import express from 'express'
 import User from '../models/user'
+import jwt from 'jsonwebtoken'
+import config from '../config/database'
 
 const router = express.Router()
+
+function verifyToken(req, res, next) {
+    // return req.headers.authorization;
+    // return res.status(401).send(req.headers.authorization)
+    if(!req.headers.authorization){
+        return res.status(401).send('Unothorized request')
+    }
+    let token = req.headers.authorization.split(' ')[1]
+    // return res.status(401).send(token)
+    if( token === 'null' ){
+        return res.status(401).send('Unothorized request')
+    }
+    let payload = jwt.verify(token, config.secret)
+    if(!payload){
+        return res.status(401).send('Unothorized request')
+    }
+    req.userID = payload.subject
+    next()
+    
+}
 
 router.post('/register', (req, res)=>{
     //res.send('REGISTER')
@@ -16,7 +38,9 @@ router.post('/register', (req, res)=>{
         if(err){
             res.send(err)
         }else{
-            res.send(user)
+            let payload = {subject: user._id}
+            let token = jwt.sign(payload, config.secret)
+            res.send({token})
         }
     })
 })
@@ -33,7 +57,9 @@ router.post('/login', (req, res)=>{
                 if(user.password !== req.body.password){
                     res.status(400).send('Invalid password')
                 }else{
-                    res.status(200).send(user)
+                    let payload = {subject: user._id}
+                    let token = jwt.sign(payload, config.secret)
+                    res.send({token})
                 }
             }
         }
@@ -41,11 +67,52 @@ router.post('/login', (req, res)=>{
 })
 
 router.get('/event', (req, res)=>{
-    res.send('EVENT')
+    let event = [
+        {
+            title: "Event title",
+            description: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+            banner: "assets/images/event.jpg"
+        },
+        {
+            title: "Event title",
+            description: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+            banner: "assets/images/event.jpg"
+        },
+        {
+            title: "Event title",
+            description: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+            banner: "assets/images/event.jpg"
+        },
+        {
+            title: "Event title",
+            description: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+            banner: "assets/images/event.jpg"
+        }
+        
+    ]
+    res.send(event)
 })
 
-router.get('/event/special', (req, res)=>{
-    res.send('SPECIAL')
+router.get('/event/special', verifyToken, (req, res)=>{
+    let specialEvent = [
+        {
+            title: "Event title",
+            description: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+            banner: "assets/images/Event_Management.jpg"
+        },
+        {
+            title: "Event title",
+            description: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+            banner: "assets/images/Event_Management.jpg"
+        },
+        {
+            title: "Event title",
+            description: "Some quick example text to build on the card title and make up the bulk of the card's content.",
+            banner: "assets/images/Event_Management.jpg"
+        }
+        
+    ]
+    res.send(specialEvent)
 })
 
 module.exports = router
